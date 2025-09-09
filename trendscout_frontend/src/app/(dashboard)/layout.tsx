@@ -1,8 +1,22 @@
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
+
+const navigation = [
+  { name: 'Dashboard', href: '/dashboard', icon: '📊' },
+  { name: 'Setup', href: '/setup', icon: '⚙️' },
+  { name: 'Competitors', href: '/competitors', icon: '🎯' },
+  { name: 'Reports', href: '/reports', icon: '📈' },
+  { name: 'Notifications', href: '/notifications', icon: '🔔' },
+  { name: 'Billing/Plans', href: '/billing', icon: '💳' },
+  { name: 'Settings', href: '/settings', icon: '🛠️' },
+];
 
 // PUBLIC_INTERFACE
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -10,6 +24,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
    * Dashboard layout component that provides a consistent shell structure
    * with sidebar navigation and top bar for all dashboard pages.
    */
+  const pathname = usePathname();
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -17,42 +33,33 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex flex-col w-full">
           {/* Logo */}
           <div className="flex items-center p-4 border-b border-gray-200">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">TS</span>
-            </div>
-            <span className="ml-2 font-semibold text-gray-900">TrendScout</span>
+            <Link href="/dashboard" className="flex items-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">TS</span>
+              </div>
+              <span className="ml-2 font-semibold text-gray-900">TrendScout</span>
+            </Link>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-2">
-            <a href="/dashboard" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white">
-              <span className="mr-3">📊</span>
-              Dashboard
-            </a>
-            <a href="/setup" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">⚙️</span>
-              Setup
-            </a>
-            <a href="/competitors" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">🎯</span>
-              Competitors
-            </a>
-            <a href="/reports" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">📈</span>
-              Reports
-            </a>
-            <a href="/notifications" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">🔔</span>
-              Notifications
-            </a>
-            <a href="/billing" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">💳</span>
-              Billing/Plans
-            </a>
-            <a href="/settings" className="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100">
-              <span className="mr-3">🛠️</span>
-              Settings
-            </a>
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
+                >
+                  <span className="mr-3">{item.icon}</span>
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* User section */}
